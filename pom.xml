@@ -20,7 +20,7 @@
   </properties>
 
   <scm>
-    <developerConnection>ssh://git@stash.backbase.com:7999/ds/device-services-test-crypto-service.git</developerConnection>
+    <developerConnection>scm:git:ssh://git@stash.backbase.com:7999/ds/device-services-test-crypto-service.git</developerConnection>
     <tag>HEAD</tag>
   </scm>
 
