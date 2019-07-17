@@ -1,5 +1,5 @@
-FROM java:8
-COPY ./target/*.jar /root/cryto-service.jar
-WORKDIR /root
+FROM tomcat:8.5.42-jdk8-openjdk
+RUN rm -rf /usr/local/tomcat/webapps/ROOT
+COPY ./target/*.war /usr/local/tomcat/webapps/ROOT.war
 EXPOSE 8080
-CMD ["java", "-jar", "cryto-service.jar"]
+CMD ["catalina.sh", "run"]
