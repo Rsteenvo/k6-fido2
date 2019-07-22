@@ -99,13 +99,13 @@
     <dependency>
       <groupId>com.backbase.identity</groupId>
       <artifactId>fido-test-library</artifactId>
-      <version>1.0.8</version>
+      <version>1.0.9-SNAPSHOT</version>
     </dependency>
 
     <dependency>
       <groupId>com.backbase.identity</groupId>
       <artifactId>device-services-common</artifactId>
-      <version>0.0.3</version>
+      <version>0.0.4-SNAPSHOT</version>
     </dependency>
 
   </dependencies>
