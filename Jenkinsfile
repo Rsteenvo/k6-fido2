@@ -4,7 +4,7 @@
 pipeline {
     agent {
         kubernetes {
-            label 'jenkins-maven-slave'
+            label 'kaniko'
         }
     }
 
@@ -39,6 +39,21 @@ pipeline {
                 withMaven(maven: MVN_VERSION, mavenSettingsConfig: SETTINGS_ID) {
                     sh "mvn test verify"
                 }
+            }
+        }
+        stage('Docker Build & Push') {
+            steps {
+                script {
+                    if (env.BRANCH_NAME == 'master') {
+                        IMAGETAG="${pom.version}".minus('-SNAPSHOT')
+                    } else {
+                        IMAGETAG="${pom.version}-${env.CHANGE_BRANCH ?: env.BRANCH_NAME}-${env.BUILD_NUMBER}"
+                    }
+                }
+
+                buildPushImage_v2("${pom.artifactId}","${IMAGETAG}", [
+                  VERSION: "${pom.version}"
+                ])
             }
         }
         stage('Release') {
