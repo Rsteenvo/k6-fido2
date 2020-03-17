@@ -46,13 +46,16 @@ pipeline {
                 script {
                     if (env.BRANCH_NAME == 'master') {
                         IMAGETAG="${pom.version}".minus('-SNAPSHOT')
+                        REPO="staging"
                     } else {
-                        IMAGETAG="${pom.version}-${env.CHANGE_BRANCH ?: env.BRANCH_NAME}-${env.BUILD_NUMBER}"
+                        IMAGETAG="${pom.version}-${env.CHANGE_BRANCH ?: env.BRANCH_NAME}"
+                        REPO="development"
                     }
                 }
 
                 buildPushImage_v2("${pom.artifactId}","${IMAGETAG}", [
-                  VERSION: "${pom.version}"
+                  VERSION: "${pom.version}",
+                  PROJECT: "${REPO}"
                 ])
             }
         }
