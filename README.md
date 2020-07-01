@@ -24,9 +24,18 @@ back to the server for verification.
 and UAF request.
 
 # Docker
-To build a Docker image, firstly build the application using
+To build a local Docker image, firstly build the application using
 `mvn clean install`
 Then run the `build-docker.sh` script
 
-To run a container from the image, run the `run-docker.sh` script
+To run a container from the locally-built image, run the `run-docker.sh` script
 This will start a container running the application, binding to port 8877 on the local machine.
+
+## harbor.backbase.eu
+You can also run containers from experimental images on `harbor.backbase.eu`.  These are currently produced following a
+successful master build of this project on [Jenkins](https://jenkins.backbase.eu).
+See [here](https://harbor.backbase.eu/harbor/projects/3/repositories/experimental%2Fdevice-services-test-crypto-service)
+for the available images.
+
+For example:
+`docker run -d -p 8877:8080 --restart=always --name device-services-test-crypto-service harbor.backbase.eu/experimental/device-services-test-crypto-service:1.0.16`
