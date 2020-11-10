@@ -11,7 +11,9 @@ import com.backbase.identity.fidotestharness.assertions.AuthenticationAssertionB
 import com.backbase.identity.fidotestharness.assertions.RegistrationAssertionBuilder;
 import com.backbase.identity.fidotestharness.response.FidoUafAuthenticationResponseBuilder;
 import com.backbase.identity.fidotestharness.response.FidoUafRegistrationResponseBuilder;
-import com.backbase.identity.fidotestharness.response.FidoUafResponseBuilder;
+import com.backbase.identity.fidotestharness.response.FidoUafResponseBuilder.DefaultFCPBase64Encoder;
+import com.backbase.identity.fidotestharness.response.FidoUafResponseBuilder.DefaultFCPHasher;
+import com.backbase.identity.fidotestharness.response.FidoUafResponseBuilder.DefaultTTHasher;
 import com.backbase.identity.fidotestharness.utils.BBPKIUtils;
 import com.backbase.identity.testapp.model.fido.uaf.authentication.CreateFidoUafAuthenticationResponseRequestBody;
 import com.backbase.identity.testapp.model.fido.uaf.authentication.CreateFidoUafAuthenticationResponseResponseBody;
@@ -58,8 +60,8 @@ public class FidoUafController {
                 .statusCode(UafStatusCode.OK)
                 .lifetimeMillis(300000L)
                 .build())
-            .withFinalChallengeParamsHasher(new FidoUafResponseBuilder.DefaultFCPHasher())
-            .withFinalChallengeParamsBase64Encoder(new FidoUafResponseBuilder.DefaultFCPBase64Encoder())
+            .withFinalChallengeParamsHasher(new DefaultFCPHasher())
+            .withFinalChallengeParamsBase64Encoder(new DefaultFCPBase64Encoder())
             .withAssertionBuilders(
                 new RegistrationAssertionBuilder()
                     .withAaid(requestBody.getAaId())
@@ -110,15 +112,16 @@ public class FidoUafController {
                 .statusCode(UafStatusCode.OK)
                 .lifetimeMillis(300000L)
                 .build())
-            .withFinalChallengeParamsHasher(new FidoUafResponseBuilder.DefaultFCPHasher())
-            .withFinalChallengeParamsBase64Encoder(new FidoUafResponseBuilder.DefaultFCPBase64Encoder())
+            .withFinalChallengeParamsHasher(new DefaultFCPHasher())
+            .withFinalChallengeParamsBase64Encoder(new DefaultFCPBase64Encoder())
+            .withTransactionTextHasher(new DefaultTTHasher())
             .withAssertionBuilders(
                 new AuthenticationAssertionBuilder()
                     .withAaid(requestBody.getAaId())
                     .withAuthenticatorVersion((short)1)
                     .withKeyAlias(keyPairAlias)
                     .withSignCounter(0)
-                    .withAuthenticationMode((byte)0x1)
+                    .withAuthenticationMode((byte)requestBody.getAuthenticationMode())
                     .withSignatureAlgAndEncoding(requestBody.getSignatureAlgorithm().equals(AuthenticationAlgorithm.ALG_SIGN_SECP256R1_ECDSA_SHA256_RAW.name())
                         ? FidoUafRegistry.ALG_SIGN_SECP256R1_ECDSA_SHA256_RAW
                         : FidoUafRegistry.ALG_SIGN_SECP256R1_ECDSA_SHA256_DER)
