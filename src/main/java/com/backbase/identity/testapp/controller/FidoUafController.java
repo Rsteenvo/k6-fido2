@@ -5,10 +5,13 @@ import com.backbase.identity.device.common.signature.AuthenticationAlgorithm;
 import com.backbase.identity.device.model.fido.Operation;
 import com.backbase.identity.device.model.fido.ReturnUafRequest;
 import com.backbase.identity.device.model.fido.SendUafResponse;
+import com.backbase.identity.device.model.fido.Transaction;
 import com.backbase.identity.device.model.fido.UafStatusCode;
 import com.backbase.identity.fidotestharness.FidoUafRegistry;
+import com.backbase.identity.fidotestharness.assertions.AssertionBuilder;
 import com.backbase.identity.fidotestharness.assertions.AuthenticationAssertionBuilder;
 import com.backbase.identity.fidotestharness.assertions.RegistrationAssertionBuilder;
+import com.backbase.identity.fidotestharness.dto.RegRequestEntry;
 import com.backbase.identity.fidotestharness.response.FidoUafAuthenticationResponseBuilder;
 import com.backbase.identity.fidotestharness.response.FidoUafRegistrationResponseBuilder;
 import com.backbase.identity.fidotestharness.response.FidoUafResponseBuilder.DefaultFCPBase64Encoder;
@@ -21,6 +24,7 @@ import com.backbase.identity.testapp.model.fido.uaf.registration.CreateFidoUafRe
 import com.backbase.identity.testapp.model.fido.uaf.registration.CreateFidoUafRegistrationResponseResponseBody;
 import com.backbase.identity.testapp.validation.ValidationUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 import java.security.Signature;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -116,22 +120,36 @@ public class FidoUafController {
             .withFinalChallengeParamsBase64Encoder(new DefaultFCPBase64Encoder())
             .withTransactionTextHasher(new DefaultTTHasher())
             .withAssertionBuilders(
-                new AuthenticationAssertionBuilder()
-                    .withAaid(requestBody.getAaId())
-                    .withAuthenticatorVersion((short)1)
-                    .withKeyAlias(keyPairAlias)
-                    .withSignCounter(0)
-                    .withAuthenticationMode((byte)requestBody.getAuthenticationMode())
-                    .withSignatureAlgAndEncoding(requestBody.getSignatureAlgorithm().equals(AuthenticationAlgorithm.ALG_SIGN_SECP256R1_ECDSA_SHA256_RAW.name())
-                        ? FidoUafRegistry.ALG_SIGN_SECP256R1_ECDSA_SHA256_RAW
-                        : FidoUafRegistry.ALG_SIGN_SECP256R1_ECDSA_SHA256_DER)
-                    .withSignature(signatureObject))
+                getAssertionBuilder(requestBody, keyPairAlias, signatureObject))
             .build();
 
         return CreateFidoUafAuthenticationResponseResponseBody.builder()
             .sendUafResponse(objectMapper.writeValueAsString(sendUafResponse))
             .signatureAlgorithm(requestBody.getSignatureAlgorithm())
             .build();
+    }
+
+    private AssertionBuilder getAssertionBuilder(
+        @RequestBody CreateFidoUafAuthenticationResponseRequestBody requestBody,
+        String keyPairAlias, Signature signatureObject) {
+        Integer authenticationMode = requestBody.getAuthenticationMode();
+        if (authenticationMode == null) {
+            Gson gson = new Gson();
+            RegRequestEntry[] regRequestEntries = gson.fromJson(requestBody.getUafRequest(), RegRequestEntry[].class);
+            Transaction[] transactions = regRequestEntries[0].getTransaction();
+            authenticationMode = transactions == null || transactions.length == 0 ? 1 : 2;
+        }
+
+        return new AuthenticationAssertionBuilder()
+            .withAaid(requestBody.getAaId())
+            .withAuthenticatorVersion((short)1)
+            .withKeyAlias(keyPairAlias)
+            .withSignCounter(0)
+            .withSignatureAlgAndEncoding(requestBody.getSignatureAlgorithm().equals(AuthenticationAlgorithm.ALG_SIGN_SECP256R1_ECDSA_SHA256_RAW.name())
+                ? FidoUafRegistry.ALG_SIGN_SECP256R1_ECDSA_SHA256_RAW
+                : FidoUafRegistry.ALG_SIGN_SECP256R1_ECDSA_SHA256_DER)
+            .withSignature(signatureObject)
+            .withAuthenticationMode(authenticationMode.byteValue());
     }
 
 
