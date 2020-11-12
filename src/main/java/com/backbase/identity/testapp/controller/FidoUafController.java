@@ -40,6 +40,8 @@ public class FidoUafController {
     private BBPKIUtils bbpkiUtils = BBPKIUtils.getInstance();
 
     private ObjectMapper objectMapper = new ObjectMapper();
+    private static final int AUTH_MODE_USER_VERIFIED = 1;
+    private static final int AUTH_MODE_TXN_CONTENT_VERIFIED = 2;
 
     @PostMapping("/registration-response")
     @ResponseStatus(HttpStatus.CREATED)
@@ -73,7 +75,7 @@ public class FidoUafController {
                     .withKeyAlias(keyPairAlias)
                     .withSignCounter(0)
                     .withRegistrationCounter(0)
-                    .withAuthenticationMode((byte)0x1)
+                    .withAuthenticationMode((byte)AUTH_MODE_USER_VERIFIED)
                     .withSignatureAlgAndEncoding(requestBody.getSignatureAlgorithm().equals(AuthenticationAlgorithm.ALG_SIGN_SECP256R1_ECDSA_SHA256_RAW.name())
                         ? FidoUafRegistry.ALG_SIGN_SECP256R1_ECDSA_SHA256_RAW
                         : FidoUafRegistry.ALG_SIGN_SECP256R1_ECDSA_SHA256_DER)
@@ -134,10 +136,11 @@ public class FidoUafController {
         String keyPairAlias, Signature signatureObject) {
         Integer authenticationMode = requestBody.getAuthenticationMode();
         if (authenticationMode == null) {
-            Gson gson = new Gson();
-            RegRequestEntry[] regRequestEntries = gson.fromJson(requestBody.getUafRequest(), RegRequestEntry[].class);
+            RegRequestEntry[] regRequestEntries = new Gson()
+                .fromJson(requestBody.getUafRequest(), RegRequestEntry[].class);
             Transaction[] transactions = regRequestEntries[0].getTransaction();
-            authenticationMode = transactions == null || transactions.length == 0 ? 1 : 2;
+            authenticationMode = transactions == null || transactions.length == 0
+                ? AUTH_MODE_USER_VERIFIED : AUTH_MODE_TXN_CONTENT_VERIFIED;
         }
 
         return new AuthenticationAssertionBuilder()
