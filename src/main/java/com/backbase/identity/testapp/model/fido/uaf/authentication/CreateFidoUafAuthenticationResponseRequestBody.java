@@ -25,4 +25,6 @@ public class CreateFidoUafAuthenticationResponseRequestBody {
 
     private String username;
 
+    private Integer authenticationMode;
+
 }
