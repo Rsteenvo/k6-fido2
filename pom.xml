@@ -15,7 +15,11 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <java.version>1.8</java.version>
+    <java.version>11</java.version>
+    <maven.compiler.source>11</maven.compiler.source>
+    <maven.compiler.target>11</maven.compiler.target>
+    <fido-test-library.version>1.0.21</fido-test-library.version>
+    <device-services-common.version>1.0.27</device-services-common.version>
   </properties>
 
   <scm>
@@ -99,13 +103,13 @@
     <dependency>
       <groupId>com.backbase.identity</groupId>
       <artifactId>fido-test-library</artifactId>
-      <version>1.0.20</version>
+      <version>${fido-test-library.version}</version>
     </dependency>
 
     <dependency>
       <groupId>com.backbase.identity</groupId>
       <artifactId>device-services-common</artifactId>
-      <version>1.0.25</version>
+      <version>${device-services-common.version}</version>
     </dependency>
 
   </dependencies>
