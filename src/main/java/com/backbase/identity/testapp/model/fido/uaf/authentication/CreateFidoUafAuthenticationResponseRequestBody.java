@@ -27,4 +27,6 @@ public class CreateFidoUafAuthenticationResponseRequestBody {
 
     private Integer authenticationMode;
 
+    private String signatureKeyPairAlias;
+
 }

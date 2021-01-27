@@ -25,5 +25,6 @@ public class CreateFidoUafRegistrationResponseRequestBody {
 
     private String trustedFacetId;
 
+    private String signatureKeyPairAlias;
 
 }

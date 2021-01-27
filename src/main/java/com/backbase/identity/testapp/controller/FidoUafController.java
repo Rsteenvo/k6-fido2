@@ -52,11 +52,16 @@ public class FidoUafController {
 
         String keyPairAlias = requestBody.getKeyPairAlias();
 
-        if (!bbpkiUtils.hasKeyPair(keyPairAlias)) {
+        String signatureKeyPairAlias = requestBody.getSignatureKeyPairAlias();
+        if (signatureKeyPairAlias == null) {
+            signatureKeyPairAlias = keyPairAlias;
+        }
+
+        if (!bbpkiUtils.hasKeyPair(signatureKeyPairAlias)) {
             throw new RuntimeException("Key pair does not exist with alias : " + keyPairAlias);
         }
 
-        Signature signatureObject = bbpkiUtils.getSignatureObject(keyPairAlias);
+        Signature signatureObject = bbpkiUtils.getSignatureObject(signatureKeyPairAlias);
 
         SendUafResponse sendUafResponse = new FidoUafRegistrationResponseBuilder()
             .withFacetId(requestBody.getTrustedFacetId())
@@ -105,9 +110,16 @@ public class FidoUafController {
 
         String keyPairAlias = requestBody.getKeyPairAlias();
 
-        if (!bbpkiUtils.hasKeyPair(keyPairAlias)) {
+        String signatureKeyPairAlias = requestBody.getSignatureKeyPairAlias();
+        if (signatureKeyPairAlias == null) {
+            signatureKeyPairAlias = keyPairAlias;
+        }
+
+        if (!bbpkiUtils.hasKeyPair(signatureKeyPairAlias)) {
             throw new RuntimeException("Key pair does not exist with alias : " + keyPairAlias);
-        }        Signature signatureObject = bbpkiUtils.getSignatureObject(keyPairAlias);
+        }
+
+        Signature signatureObject = bbpkiUtils.getSignatureObject(signatureKeyPairAlias);
 
         SendUafResponse sendUafResponse = new FidoUafAuthenticationResponseBuilder()
             .withUsername(requestBody.getUsername())
