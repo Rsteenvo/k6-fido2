@@ -27,4 +27,8 @@ public class CreateFidoUafRegistrationResponseRequestBody {
 
     private String signatureKeyPairAlias;
 
+    private String overridenSignature;
+
+    private String signatureSignData;
+
 }
