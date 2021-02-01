@@ -52,11 +52,16 @@ public class FidoUafController {
 
         String keyPairAlias = requestBody.getKeyPairAlias();
 
-        if (!bbpkiUtils.hasKeyPair(keyPairAlias)) {
+        String signatureKeyPairAlias = requestBody.getSignatureKeyPairAlias();
+        if (signatureKeyPairAlias == null) {
+            signatureKeyPairAlias = keyPairAlias;
+        }
+
+        if (!bbpkiUtils.hasKeyPair(signatureKeyPairAlias)) {
             throw new RuntimeException("Key pair does not exist with alias : " + keyPairAlias);
         }
 
-        Signature signatureObject = bbpkiUtils.getSignatureObject(keyPairAlias);
+        Signature signatureObject = bbpkiUtils.getSignatureObject(signatureKeyPairAlias);
 
         SendUafResponse sendUafResponse = new FidoUafRegistrationResponseBuilder()
             .withFacetId(requestBody.getTrustedFacetId())
@@ -87,7 +92,9 @@ public class FidoUafController {
                         requestBody.getPublicKeyAlgorithm().equals(PublicKeyAlgorithm.ALG_KEY_ECC_X962_RAW.name())
                             ? FidoUafRegistry.ALG_KEY_ECC_X962_RAW
                             : FidoUafRegistry.ALG_KEY_ECC_X962_DER))
-                    .withSignature(signatureObject))
+                    .withSignature(signatureObject)
+                    .withOverridenSignature(requestBody.getOverridenSignature())
+                    .withSignatureSignData(requestBody.getSignatureSignData()))
             .build();
 
         return CreateFidoUafRegistrationResponseResponseBody.builder()
@@ -105,9 +112,16 @@ public class FidoUafController {
 
         String keyPairAlias = requestBody.getKeyPairAlias();
 
-        if (!bbpkiUtils.hasKeyPair(keyPairAlias)) {
+        String signatureKeyPairAlias = requestBody.getSignatureKeyPairAlias();
+        if (signatureKeyPairAlias == null) {
+            signatureKeyPairAlias = keyPairAlias;
+        }
+
+        if (!bbpkiUtils.hasKeyPair(signatureKeyPairAlias)) {
             throw new RuntimeException("Key pair does not exist with alias : " + keyPairAlias);
-        }        Signature signatureObject = bbpkiUtils.getSignatureObject(keyPairAlias);
+        }
+
+        Signature signatureObject = bbpkiUtils.getSignatureObject(signatureKeyPairAlias);
 
         SendUafResponse sendUafResponse = new FidoUafAuthenticationResponseBuilder()
             .withUsername(requestBody.getUsername())
@@ -152,7 +166,9 @@ public class FidoUafController {
                 ? FidoUafRegistry.ALG_SIGN_SECP256R1_ECDSA_SHA256_RAW
                 : FidoUafRegistry.ALG_SIGN_SECP256R1_ECDSA_SHA256_DER)
             .withSignature(signatureObject)
-            .withAuthenticationMode(authenticationMode.byteValue());
+            .withAuthenticationMode(authenticationMode.byteValue())
+            .withOverridenSignature(requestBody.getOverridenSignature())
+            .withSignatureSignData(requestBody.getSignatureSignData());
     }
 
 
