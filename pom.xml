@@ -19,7 +19,7 @@
     <maven.compiler.source>11</maven.compiler.source>
     <maven.compiler.target>11</maven.compiler.target>
     <fido-test-library.version>1.0.22</fido-test-library.version>
-    <device-services-common.version>1.0.30</device-services-common.version>
+    <device-services-common.version>1.0.31</device-services-common.version>
   </properties>
 
   <scm>
