@@ -33,4 +33,6 @@ public class CreateFidoUafAuthenticationResponseRequestBody {
 
     private String signatureSignData;
 
+    private Boolean authFlowSupportsKeyRotation;
+
 }
