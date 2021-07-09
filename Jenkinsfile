@@ -4,7 +4,7 @@
 pipeline {
     agent {
         kubernetes {
-            inheritFrom 'kaniko-jdk11'
+            inheritFrom 'kaniko'
         }
     }
 
