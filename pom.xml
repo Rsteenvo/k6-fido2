@@ -9,7 +9,7 @@
   </parent>
   <groupId>com.backbase.identity</groupId>
   <artifactId>device-services-test-crypto-service</artifactId>
-  <version>1.0.36-SNAPSHOT</version>
+  <version>1.0.36</version>
   <packaging>war</packaging>
 
   <properties>
@@ -24,7 +24,7 @@
 
   <scm>
     <developerConnection>scm:git:ssh://git@stash.backbase.com:7999/ds/device-services-test-crypto-service.git</developerConnection>
-    <tag>HEAD</tag>
+    <tag>device-services-test-crypto-service-1.0.36</tag>
   </scm>
 
   <distributionManagement>
