@@ -8,6 +8,10 @@ pipeline {
         }
     }
 
+    tools {
+        jdk "jdk-17"
+    }
+
     // Disable concurrent build on a branch to avoid we tag 1 commits twice. This is valid per branch and not the whole job.
     options {
         disableConcurrentBuilds()
