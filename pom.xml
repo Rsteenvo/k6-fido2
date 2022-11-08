@@ -23,7 +23,7 @@
   </properties>
 
   <scm>
-    <developerConnection>scm:git:ssh://git@github.com:backbase-rnd/ds-device-services-test-crypto-service.git</developerConnection>
+    <developerConnection>scm:git:git@github.com:backbase-rnd/ds-device-services-test-crypto-service.git</developerConnection>
     <tag>HEAD</tag>
   </scm>
 
