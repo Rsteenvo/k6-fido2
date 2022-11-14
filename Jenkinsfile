@@ -73,7 +73,7 @@ pipeline {
                 }
             }
             steps {
-                sshagent(["stash_clippyservice_ssh_key"]){
+                sshAgentForSCM {
                     withMaven(maven: MVN_VERSION,  mavenSettingsConfig: SETTINGS_ID){
                         script {
                             // during release we don't have to run tests again. This saves a tremendous amount of time
