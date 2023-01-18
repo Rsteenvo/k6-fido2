@@ -125,6 +125,8 @@ public class FidoUafController {
 
         SendUafResponse sendUafResponse = new FidoUafAuthenticationResponseBuilder()
             .withUsername(requestBody.getUsername())
+            .withUserId(requestBody.getUserId())
+            .withDeviceId(requestBody.getDeviceId())
             .withFacetId(requestBody.getTrustedFacetId())
             .withAuthFlowSupportsKeyRotation(requestBody.getAuthFlowSupportsKeyRotation())
             .withAuthenticationRequest(ReturnUafRequest.builder()
