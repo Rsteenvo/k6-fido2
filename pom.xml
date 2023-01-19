@@ -18,7 +18,7 @@
     <java.version>17</java.version>
     <maven.compiler.source>17</maven.compiler.source>
     <maven.compiler.target>17</maven.compiler.target>
-    <fido-test-library.version>1.0.30</fido-test-library.version>
+    <fido-test-library.version>1.0.31</fido-test-library.version>
     <device-services-common.version>1.0.42</device-services-common.version>
   </properties>
 
