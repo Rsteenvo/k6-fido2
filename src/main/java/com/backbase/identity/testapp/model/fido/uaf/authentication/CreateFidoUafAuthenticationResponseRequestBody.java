@@ -25,6 +25,10 @@ public class CreateFidoUafAuthenticationResponseRequestBody {
 
     private String username;
 
+    private String userId;
+
+    private String deviceId;
+
     private Integer authenticationMode;
 
     private String signatureKeyPairAlias;
