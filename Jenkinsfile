@@ -48,7 +48,8 @@ pipeline {
         stage('Docker Build & Push') {
             steps {
                 script {
-                    if (env.BRANCH_NAME == 'master') {
+                    if (env.BRANCH_NAME == 'master'
+                    || BRANCH_NAME.matches("(.*)-hotfix")) {
                         IMAGETAG="${pom.version}".minus('-SNAPSHOT')
                         REPO="staging"
                     } else {
@@ -68,8 +69,6 @@ pipeline {
                 anyOf {
                     branch 'master'
                     expression { env.BRANCH_NAME ==~ /^\d+\.\d+\.\d+-hotfix$/ }
-                    expression { env.BRANCH_NAME ==~ /^\d+\.\d+\.\d+-patch$/ }
-                    expression { env.BRANCH_NAME ==~ /^\d+\.\d+\.\d+-release$/ }
                 }
             }
             steps {
