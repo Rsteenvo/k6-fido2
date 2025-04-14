@@ -1,0 +1,3 @@
+# Dummy catalog info file to bypass Sonar scanning
+spec:
+  type: test

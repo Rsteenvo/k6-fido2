@@ -7,7 +7,7 @@ To run app use the following command
 
 The application will listen on port 8080.
 
-Swagger documentation can then be found at http://localhost:8080/swagger-ui.html
+Swagger documentation can then be found at http://localhost:8080/swagger-ui/index.html
 
 This should be sufficient to explain how to use the API:
 * Get some data

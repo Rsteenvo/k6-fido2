@@ -1,0 +1,25 @@
+name: Branch merged workflow
+
+on:
+  push:
+    branches:
+      - main
+      - hotfix/*
+
+jobs:
+  pr-merged:
+    uses: backbase-common/workflows/.github/workflows/java-maven-merge.yaml@13.1.1
+    secrets:
+      maven-username: ${{ secrets.REPO_DEPLOY_USR }}
+      maven-password: ${{ secrets.REPO_DEPLOY_PWD }}
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      ACR_CLIENT_ID_SECRET: ${{ secrets.CORPSYSTEMS_ACR_CLIENT_ID_SECRET }}
+      ACR_SECRET_PASSWORD: ${{ secrets.CORPSYSTEMS_ACR_SECRET_PASSWORD }}
+      ACR_TENANT_ID_SECRET: ${{ secrets.CORPSYSTEMS_ACR_TENANT_ID_SECRET }}
+      SECURITY_TOKEN: ${{ secrets.SECURITY_TOKEN }}
+      SECURITY_TOOL_MTLS_CERT: ${{ secrets.SECURITY_TOOL_MTLS_CERT }}
+      SECURITY_TOOL_MTLS_KEY: ${{ secrets.SECURITY_TOOL_MTLS_KEY }}
+      SECURITY_TOOL_MTLS_PWD: ${{ secrets.SECURITY_TOOL_MTLS_PWD }}
+      AZ_DB_DOCS_CLIENT_ID: ${{ secrets.BACKBASE_IO_DB_DOCS_PRD_CLIENT_ID }}
+      AZ_DB_DOCS_SECRET: ${{ secrets.BACKBASE_IO_DB_DOCS_PRD_SECRET }}
+      AZ_TENANT_ID: ${{ secrets.TENANT_ID }}

@@ -1,0 +1,22 @@
+# Set update schedule for GitHub Actions
+
+version: 2
+registries:
+  github: # GitHub registry for updating GitHub Actions
+    type: git
+    url: 'https://github.com/'
+    username: 'x-access-token' # Not actually used but field required
+    password: '${{ secrets.DEPENDABOT_TOKEN }}' # Preset dependabot token
+updates:
+  - package-ecosystem: 'github-actions'
+    directory: '/'
+    schedule:
+      interval: 'daily' # Set to daily can change if desired, see example below
+      # # Check for updates to GitHub Actions every Sunday at 9pm
+      # interval: 'weekly'
+      # day: 'sunday'
+      # time: '21:00'
+    registries:
+      - 'github'
+    commit-message:
+      prefix: 'Update workflows & actions:'

@@ -1,0 +1,27 @@
+name: Promote RC Release workflow
+
+on:
+  # To manually trigger
+  workflow_dispatch:
+    inputs:
+      git-tag:
+        description: 'RC tag to promote'
+        required: true
+
+jobs:
+  release:
+    uses: backbase-common/workflows/.github/workflows/java-maven-promote-rc.yaml@13.1.1
+    with:
+      git-tag: ${{ inputs.git-tag }}
+    secrets:
+      maven-username: ${{ secrets.REPO_DEPLOY_USR }}
+      maven-password: ${{ secrets.REPO_DEPLOY_PWD }}
+      github-token: ${{ secrets.GITHUB_TOKEN }}
+      ACR_CLIENT_ID_SECRET: ${{ secrets.CORPSYSTEMS_ACR_CLIENT_ID_SECRET }}
+      ACR_SECRET_PASSWORD: ${{ secrets.CORPSYSTEMS_ACR_SECRET_PASSWORD }}
+      ACR_TENANT_ID_SECRET: ${{ secrets.CORPSYSTEMS_ACR_TENANT_ID_SECRET }}
+      PROD_ACR_CLIENT_ID: ${{ secrets.REUSABLE_WFS_SHARED_ACR_CLIENT_ID }}
+      PROD_ACR_CLIENT_SECRET: ${{ secrets.REUSABLE_WFS_SHARED_ACR_CLIENT_SECRET }}
+      AZ_DB_DOCS_CLIENT_ID: ${{ secrets.BACKBASE_IO_DB_DOCS_PRD_CLIENT_ID }}
+      AZ_DB_DOCS_SECRET: ${{ secrets.BACKBASE_IO_DB_DOCS_PRD_SECRET }}
+      AZ_TENANT_ID: ${{ secrets.TENANT_ID }}
