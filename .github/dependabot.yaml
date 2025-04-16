@@ -11,11 +11,7 @@ updates:
   - package-ecosystem: 'github-actions'
     directory: '/'
     schedule:
-      interval: 'daily' # Set to daily can change if desired, see example below
-      # # Check for updates to GitHub Actions every Sunday at 9pm
-      # interval: 'weekly'
-      # day: 'sunday'
-      # time: '21:00'
+      interval: 'monthly'
     registries:
       - 'github'
     commit-message:
