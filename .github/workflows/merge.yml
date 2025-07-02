@@ -8,7 +8,7 @@ on:
 
 jobs:
   pr-merged:
-    uses: backbase-common/workflows/.github/workflows/java-maven-merge.yaml@14.1.11
+    uses: backbase-common/workflows/.github/workflows/java-maven-merge.yaml@14.5.0
     secrets:
       maven-username: ${{ secrets.REPO_DEPLOY_USR }}
       maven-password: ${{ secrets.REPO_DEPLOY_PWD }}

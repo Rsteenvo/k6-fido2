@@ -10,7 +10,7 @@ on:
 
 jobs:
   release:
-    uses: backbase-common/workflows/.github/workflows/java-maven-promote-rc.yaml@14.1.11
+    uses: backbase-common/workflows/.github/workflows/java-maven-promote-rc.yaml@14.5.0
     with:
       git-tag: ${{ inputs.git-tag }}
     secrets:
