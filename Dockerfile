@@ -1,4 +1,4 @@
-FROM docker-proxy.backbase.eu/dockerhub/library/tomcat:8.5.81-jre17-temurin
+FROM docker-proxy.backbase.eu/dockerhub/library/tomcat:10.1.43-jre21-temurin
 RUN rm -rf /usr/local/tomcat/webapps/ROOT
 COPY ./target/*.war /usr/local/tomcat/webapps/ROOT.war
 EXPOSE 8080
