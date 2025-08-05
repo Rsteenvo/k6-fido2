@@ -12,7 +12,7 @@ on:
 
 jobs:
   pr-build:
-    uses: backbase-common/workflows/.github/workflows/java-maven-pull-request.yaml@14.5.0
+    uses: backbase-common/workflows/.github/workflows/java-maven-pull-request.yaml@14.10.0
     secrets:
       maven-username: ${{ secrets.REPO_DEPLOY_USR }}
       maven-password: ${{ secrets.REPO_DEPLOY_PWD }}
