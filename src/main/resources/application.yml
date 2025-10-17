@@ -1,3 +1,6 @@
 logging:
   level:
     com.backbase.identity: DEBUG
+server:
+  error:
+    include-message: always

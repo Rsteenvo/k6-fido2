@@ -9,7 +9,7 @@ The application will listen on port 8080.
 
 Swagger documentation can then be found at http://localhost:8080/swagger-ui/index.html
 
-This should be sufficient to explain how to use the API:
+How to use the Fido UAF API:
 * Get some data
 * Post the base64-encoded raw SHA-256 hash of that data back to the server for verification.
 * Post the ECDSA signature, base64-encoded raw or DER, of that data, along with the public key and algorithm, 
@@ -22,6 +22,10 @@ back to the server for verification.
 * Sign some data using a previously-created key pair
 * Generate FIDO UAF registration responses and authentication responses, given the key pair alias, signature algorithm,
 and UAF request.
+
+How to use the Fido2 WebAuthn API:
+* /webauthn/register
+* /webauthn/authenticate
 
 # Docker
 To build a local Docker image, firstly build the application using
