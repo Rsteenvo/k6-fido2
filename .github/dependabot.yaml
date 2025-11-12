@@ -16,3 +16,7 @@ updates:
       - 'github'
     commit-message:
       prefix: 'Update workflows & actions:'
+    groups:
+      github-actions:
+        patterns:
+          - "*"

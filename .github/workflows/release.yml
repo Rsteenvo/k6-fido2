@@ -7,7 +7,7 @@ on:
 
 jobs:
   release:
-    uses: backbase-common/workflows/.github/workflows/java-maven-release.yaml@16.0.1
+    uses: backbase-common/workflows/.github/workflows/java-maven-release.yaml@16.1.4
     secrets:
       maven-username: ${{ secrets.REPO_DEPLOY_USR }}
       maven-password: ${{ secrets.REPO_DEPLOY_PWD }}
