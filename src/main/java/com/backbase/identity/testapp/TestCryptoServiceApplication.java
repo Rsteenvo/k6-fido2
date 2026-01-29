@@ -1,9 +1,6 @@
 package com.backbase.identity.testapp;
 
-import com.backbase.identity.fido2testharness.jackson.FidoTestLibraryModule;
-import com.fasterxml.jackson.databind.Module;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.module.SimpleModule;
 import java.security.KeyPair;
 import java.security.Security;
 import java.util.HashMap;
@@ -15,7 +12,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -33,19 +29,6 @@ public class TestCryptoServiceApplication extends SpringBootServletInitializer {
     @Bean
     public Map<String, KeyPair> fido2KeyPairs() {
         return new HashMap<>();
-    }
-
-    @Bean
-    public Module fidoTestLibraryModule() {
-        return new FidoTestLibraryModule();
-    }
-
-    @Bean
-    @Primary
-    public ObjectMapper objectMapper(Module fidoTestLibraryModule) {
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.registerModule(fidoTestLibraryModule);
-        return mapper;
     }
 }
 

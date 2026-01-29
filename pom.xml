@@ -16,7 +16,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <java.version>21</java.version>
-    <fido-test-library.version>1.2.0</fido-test-library.version>
+    <fido-test-library.version>1.4.0</fido-test-library.version>
     <device-services-common.version>1.1.0</device-services-common.version>
   </properties>
 
