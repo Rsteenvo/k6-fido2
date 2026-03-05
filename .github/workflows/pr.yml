@@ -12,7 +12,7 @@ on:
 
 jobs:
   pr-build:
-    uses: backbase-common/workflows/.github/workflows/java-maven-pull-request-legacy.yaml@19.19.2
+    uses: backbase-common/workflows/.github/workflows/java-maven-pull-request-legacy.yaml@24.3.0
     secrets:
       maven-username: ${{ secrets.REPO_DEPLOY_USR }}
       maven-password: ${{ secrets.REPO_DEPLOY_PWD }}
@@ -20,7 +20,3 @@ jobs:
       ACR_CLIENT_ID_SECRET: ${{ secrets.CORPSYSTEMS_ACR_CLIENT_ID_SECRET }}
       ACR_SECRET_PASSWORD: ${{ secrets.CORPSYSTEMS_ACR_SECRET_PASSWORD }}
       ACR_TENANT_ID_SECRET: ${{ secrets.CORPSYSTEMS_ACR_TENANT_ID_SECRET }}
-      SECURITY_TOKEN: ${{ secrets.SECURITY_TOKEN }}
-      SECURITY_TOOL_MTLS_CERT: ${{ secrets.SECURITY_TOOL_MTLS_CERT }}
-      SECURITY_TOOL_MTLS_KEY: ${{ secrets.SECURITY_TOOL_MTLS_KEY }}
-      SECURITY_TOOL_MTLS_PWD: ${{ secrets.SECURITY_TOOL_MTLS_PWD }}
