@@ -1,12 +1,10 @@
-# Set update schedule for GitHub Actions
-
 version: 2
 registries:
-  github: # GitHub registry for updating GitHub Actions
+  github:
     type: git
     url: 'https://github.com/'
-    username: 'x-access-token' # Not actually used but field required
-    password: '${{ secrets.DEPENDABOT_TOKEN }}' # Preset dependabot token
+    username: 'x-access-token'
+    password: '${{ secrets.DEPENDABOT_TOKEN }}'
 updates:
   - package-ecosystem: 'github-actions'
     directory: '/'
@@ -18,5 +16,16 @@ updates:
       prefix: 'Update workflows & actions:'
     groups:
       github-actions:
+        patterns:
+          - "*"
+
+  - package-ecosystem: 'gomod'
+    directory: '/xk6-fido2'
+    schedule:
+      interval: 'weekly'
+    commit-message:
+      prefix: 'Update Go dependencies:'
+    groups:
+      go-dependencies:
         patterns:
           - "*"

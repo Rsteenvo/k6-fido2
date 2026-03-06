@@ -7,19 +7,27 @@ on:
       - hotfix/*
 
 jobs:
-  pr-merged:
-    uses: backbase-common/workflows/.github/workflows/java-maven-merge-legacy.yaml@24.3.0
-    secrets:
-      maven-username: ${{ secrets.REPO_DEPLOY_USR }}
-      maven-password: ${{ secrets.REPO_DEPLOY_PWD }}
-      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-      ACR_CLIENT_ID_SECRET: ${{ secrets.CORPSYSTEMS_ACR_CLIENT_ID_SECRET }}
-      ACR_SECRET_PASSWORD: ${{ secrets.CORPSYSTEMS_ACR_SECRET_PASSWORD }}
-      ACR_TENANT_ID_SECRET: ${{ secrets.CORPSYSTEMS_ACR_TENANT_ID_SECRET }}
-      SECURITY_TOKEN: ${{ secrets.SECURITY_TOKEN }}
-      SECURITY_TOOL_MTLS_CERT: ${{ secrets.SECURITY_TOOL_MTLS_CERT }}
-      SECURITY_TOOL_MTLS_KEY: ${{ secrets.SECURITY_TOOL_MTLS_KEY }}
-      SECURITY_TOOL_MTLS_PWD: ${{ secrets.SECURITY_TOOL_MTLS_PWD }}
-      AZ_DB_DOCS_CLIENT_ID: ${{ secrets.BACKBASE_IO_DB_DOCS_PRD_CLIENT_ID }}
-      AZ_DB_DOCS_SECRET: ${{ secrets.BACKBASE_IO_DB_DOCS_PRD_SECRET }}
-      AZ_TENANT_ID: ${{ secrets.TENANT_ID }}
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: xk6-fido2
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.21'
+
+      - name: Download dependencies
+        run: go mod download
+
+      - name: Build
+        run: go build ./...
+
+      - name: Run tests
+        run: go test -v ./...
+
+      - name: Run vet
+        run: go vet ./...
