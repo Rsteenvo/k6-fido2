@@ -62,3 +62,63 @@ func (a *Authenticator) HasCredential(credentialID string) bool {
 	_, ok := a.credentials[credentialID]
 	return ok
 }
+
+// GetPublicKey returns the base64-encoded public key for a credential
+func (a *Authenticator) GetPublicKey(credentialID string) ([]byte, error) {
+	keyPair, err := a.GetCredential(credentialID)
+	if err != nil {
+		return nil, err
+	}
+	return keyPair.GetCOSEPublicKey()
+}
+
+// SignData signs data with a stored credential's private key (DER format)
+func (a *Authenticator) SignData(credentialID string, data []byte) ([]byte, error) {
+	keyPair, err := a.GetCredential(credentialID)
+	if err != nil {
+		return nil, err
+	}
+	return keyPair.SignDER(data)
+}
+
+// SignDataRaw signs data with a stored credential's private key (raw r||s format)
+func (a *Authenticator) SignDataRaw(credentialID string, data []byte) ([]byte, error) {
+	keyPair, err := a.GetCredential(credentialID)
+	if err != nil {
+		return nil, err
+	}
+	return keyPair.Sign(data)
+}
+
+// ExportCredential exports a credential for persistence
+func (a *Authenticator) ExportCredential(credentialID string) (*ExportedCredential, error) {
+	keyPair, err := a.GetCredential(credentialID)
+	if err != nil {
+		return nil, err
+	}
+	return keyPair.Export(), nil
+}
+
+// ImportCredential imports a credential from exported data
+func (a *Authenticator) ImportCredential(exported *ExportedCredential) error {
+	keyPair, err := ImportKeyPair(exported)
+	if err != nil {
+		return err
+	}
+	
+	credentialIDBase64 := base64.RawURLEncoding.EncodeToString(keyPair.CredentialID)
+	a.StoreCredential(credentialIDBase64, keyPair)
+	return nil
+}
+
+// ExportAllCredentials exports all stored credentials
+func (a *Authenticator) ExportAllCredentials() []*ExportedCredential {
+	a.mu.RLock()
+	defer a.mu.RUnlock()
+
+	result := make([]*ExportedCredential, 0, len(a.credentials))
+	for _, kp := range a.credentials {
+		result = append(result, kp.Export())
+	}
+	return result
+}

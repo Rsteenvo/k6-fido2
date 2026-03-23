@@ -24,7 +24,7 @@ This library simulates a WebAuthn platform authenticator (like TouchID, FaceID, 
 cd xk6-fido2
 
 # Build custom k6 binary with the extension
-xk6 build --with github.com/backbase-rnd/k6-fido2=.
+xk6 build --with github.com/rsteenvo/k6-fido2=.
 
 # Or for local development
 xk6 build --with xk6-fido2=.

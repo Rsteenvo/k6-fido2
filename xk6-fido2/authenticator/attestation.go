@@ -4,7 +4,7 @@ import (
 	"encoding/base64"
 	"fmt"
 
-	"github.com/backbase-rnd/k6-fido2/webauthn"
+	"github.com/rsteenvo/k6-fido2/webauthn"
 )
 
 // RegistrationResult contains the result of a credential registration

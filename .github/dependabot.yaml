@@ -1,17 +1,9 @@
 version: 2
-registries:
-  github:
-    type: git
-    url: 'https://github.com/'
-    username: 'x-access-token'
-    password: '${{ secrets.DEPENDABOT_TOKEN }}'
 updates:
   - package-ecosystem: 'github-actions'
     directory: '/'
     schedule:
       interval: 'monthly'
-    registries:
-      - 'github'
     commit-message:
       prefix: 'Update workflows & actions:'
     groups:

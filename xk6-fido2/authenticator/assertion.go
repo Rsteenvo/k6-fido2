@@ -5,7 +5,7 @@ import (
 	"encoding/base64"
 	"fmt"
 
-	"github.com/backbase-rnd/k6-fido2/webauthn"
+	"github.com/rsteenvo/k6-fido2/webauthn"
 )
 
 // AuthenticationResult contains the result of a credential authentication

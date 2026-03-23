@@ -4,6 +4,7 @@ import (
 	"crypto/ecdsa"
 	"crypto/elliptic"
 	"crypto/rand"
+	"encoding/base64"
 	"fmt"
 	"math/big"
 
@@ -74,6 +75,25 @@ func (kp *KeyPair) GetCOSEPublicKey() ([]byte, error) {
 	}
 
 	return cbor.Marshal(coseKey)
+}
+
+// GetX962PublicKey returns the public key in X9.62 uncompressed point format (04 || X || Y)
+func (kp *KeyPair) GetX962PublicKey() []byte {
+	// Ensure X and Y coordinates are 32 bytes (P-256)
+	xBytes := kp.PublicKey.X.Bytes()
+	yBytes := kp.PublicKey.Y.Bytes()
+
+	// Pad to 32 bytes if needed
+	xBytes = padTo32Bytes(xBytes)
+	yBytes = padTo32Bytes(yBytes)
+
+	// X9.62 uncompressed format: 0x04 || X || Y (65 bytes total)
+	result := make([]byte, 65)
+	result[0] = 0x04 // Uncompressed point indicator
+	copy(result[1:33], xBytes)
+	copy(result[33:65], yBytes)
+
+	return result
 }
 
 // Sign signs the data using the private key and returns the signature in raw format (r||s)
@@ -153,4 +173,58 @@ func encodeDERSignature(r, s *big.Int) []byte {
 	der = append(der, sBytes...)
 
 	return der
+}
+
+// ExportedCredential represents a serializable credential for persistence
+type ExportedCredential struct {
+	CredentialID string `json:"credentialId"`
+	PrivateKeyD  string `json:"privateKeyD"`
+	SignCount    uint32 `json:"signCount"`
+}
+
+// Export serializes the KeyPair for storage
+func (kp *KeyPair) Export() *ExportedCredential {
+	return &ExportedCredential{
+		CredentialID: base64.RawURLEncoding.EncodeToString(kp.CredentialID),
+		PrivateKeyD:  base64.RawURLEncoding.EncodeToString(kp.PrivateKey.D.Bytes()),
+		SignCount:    kp.SignCount,
+	}
+}
+
+// ImportKeyPair reconstructs a KeyPair from exported data
+func ImportKeyPair(exported *ExportedCredential) (*KeyPair, error) {
+	// Decode credential ID
+	credentialID, err := base64.RawURLEncoding.DecodeString(exported.CredentialID)
+	if err != nil {
+		return nil, fmt.Errorf("failed to decode credential ID: %w", err)
+	}
+
+	// Decode private key D value
+	dBytes, err := base64.RawURLEncoding.DecodeString(exported.PrivateKeyD)
+	if err != nil {
+		return nil, fmt.Errorf("failed to decode private key: %w", err)
+	}
+
+	// Reconstruct the private key
+	curve := elliptic.P256()
+	d := new(big.Int).SetBytes(dBytes)
+
+	// Compute public key from D
+	x, y := curve.ScalarBaseMult(d.Bytes())
+
+	privateKey := &ecdsa.PrivateKey{
+		PublicKey: ecdsa.PublicKey{
+			Curve: curve,
+			X:     x,
+			Y:     y,
+		},
+		D: d,
+	}
+
+	return &KeyPair{
+		CredentialID: credentialID,
+		PrivateKey:   privateKey,
+		PublicKey:    &privateKey.PublicKey,
+		SignCount:    exported.SignCount,
+	}, nil
 }

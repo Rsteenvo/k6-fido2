@@ -1,8 +1,11 @@
 package fido2
 
 import (
-	"github.com/backbase-rnd/k6-fido2/authenticator"
-	"github.com/backbase-rnd/k6-fido2/webauthn"
+	"crypto/sha256"
+	"encoding/base64"
+
+	"github.com/rsteenvo/k6-fido2/authenticator"
+	"github.com/rsteenvo/k6-fido2/webauthn"
 
 	"go.k6.io/k6/js/modules"
 )
@@ -95,11 +98,111 @@ func (f *Fido2) Authenticate(opts map[string]interface{}) (map[string]interface{
 	}, nil
 }
 
+// GenerateDeviceKey creates a new EC key pair for device registration
+// Returns: { alias: string, publicKey: string (base64 X9.62 uncompressed format) }
+func (f *Fido2) GenerateDeviceKey() (map[string]interface{}, error) {
+	keyPair, err := f.authenticator.CreateCredential()
+	if err != nil {
+		return nil, err
+	}
+
+	alias := base64.RawURLEncoding.EncodeToString(keyPair.CredentialID)
+
+	// Get public key in X9.62 uncompressed format (04 || X || Y)
+	pubKeyBytes := keyPair.GetX962PublicKey()
+
+	return map[string]interface{}{
+		"alias":     alias,
+		"publicKey": base64.StdEncoding.EncodeToString(pubKeyBytes),
+	}, nil
+}
+
+// SignWithDeviceKey signs data with a stored device key
+// Options: { alias: string, data: string }
+// Returns: { signature: string (base64 raw r||s format) }
+func (f *Fido2) SignWithDeviceKey(opts map[string]interface{}) (map[string]interface{}, error) {
+	alias := getStringOption(opts, "alias", "")
+	data := getStringOption(opts, "data", "")
+
+	// Hash the data with SHA-256 before signing (standard practice for ECDSA)
+	hash := sha256.Sum256([]byte(data))
+
+	// Use raw signature format (r || s) instead of DER
+	signature, err := f.authenticator.SignDataRaw(alias, hash[:])
+	if err != nil {
+		return nil, err
+	}
+
+	return map[string]interface{}{
+		"signature": base64.StdEncoding.EncodeToString(signature),
+	}, nil
+}
+
+// ExportCredential exports a credential for storage/persistence
+// Options: { credentialId: string }
+// Returns: { credentialId: string, privateKeyD: string, signCount: number }
+func (f *Fido2) ExportCredential(credentialID string) (map[string]interface{}, error) {
+	exported, err := f.authenticator.ExportCredential(credentialID)
+	if err != nil {
+		return nil, err
+	}
+
+	return map[string]interface{}{
+		"credentialId": exported.CredentialID,
+		"privateKeyD":  exported.PrivateKeyD,
+		"signCount":    exported.SignCount,
+	}, nil
+}
+
+// ImportCredential imports a previously exported credential
+// Options: { credentialId: string, privateKeyD: string, signCount: number }
+func (f *Fido2) ImportCredential(opts map[string]interface{}) error {
+	exported := &authenticator.ExportedCredential{
+		CredentialID: getStringOption(opts, "credentialId", ""),
+		PrivateKeyD:  getStringOption(opts, "privateKeyD", ""),
+		SignCount:    uint32(getIntOption(opts, "signCount", 0)),
+	}
+
+	return f.authenticator.ImportCredential(exported)
+}
+
+// ExportAllCredentials exports all stored credentials
+// Returns: array of { credentialId: string, privateKeyD: string, signCount: number }
+func (f *Fido2) ExportAllCredentials() []map[string]interface{} {
+	credentials := f.authenticator.ExportAllCredentials()
+	result := make([]map[string]interface{}, len(credentials))
+
+	for i, cred := range credentials {
+		result[i] = map[string]interface{}{
+			"credentialId": cred.CredentialID,
+			"privateKeyD":  cred.PrivateKeyD,
+			"signCount":    cred.SignCount,
+		}
+	}
+
+	return result
+}
+
 // getStringOption safely extracts a string option from a map
 func getStringOption(opts map[string]interface{}, key, defaultValue string) string {
 	if val, ok := opts[key]; ok {
 		if strVal, ok := val.(string); ok {
 			return strVal
+		}
+	}
+	return defaultValue
+}
+
+// getIntOption safely extracts an int option from a map
+func getIntOption(opts map[string]interface{}, key string, defaultValue int) int {
+	if val, ok := opts[key]; ok {
+		switch v := val.(type) {
+		case int:
+			return v
+		case int64:
+			return int(v)
+		case float64:
+			return int(v)
 		}
 	}
 	return defaultValue

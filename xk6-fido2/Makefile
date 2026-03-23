@@ -2,7 +2,7 @@
 
 # Build the custom k6 binary with the fido2 extension
 build:
-	xk6 build --with github.com/backbase-rnd/k6-fido2=.
+	xk6 build --with github.com/rsteenvo/k6-fido2=.
 
 # Build for local development
 build-local:

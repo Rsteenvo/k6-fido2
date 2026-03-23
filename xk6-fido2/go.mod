@@ -1,4 +1,4 @@
-module github.com/backbase-rnd/k6-fido2
+module github.com/rsteenvo/k6-fido2
 
 go 1.24.0
 

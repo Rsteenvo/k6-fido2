@@ -34,7 +34,7 @@ jobs:
       - name: Build k6 binary with extension
         run: |
           cd ..
-          xk6 build --with github.com/backbase-rnd/k6-fido2=./xk6-fido2 --output k6-fido2
+          xk6 build --with github.com/rsteenvo/k6-fido2=./xk6-fido2 --output k6-fido2
 
       - name: Upload k6 binary
         uses: actions/upload-artifact@v4

@@ -12,7 +12,7 @@ A K6 extension for FIDO2/WebAuthn client simulation, enabling performance testin
 ## Building
 
 ```bash
-xk6 build --with github.com/backbase-rnd/k6-fido2=.
+xk6 build --with github.com/rsteenvo/k6-fido2=.
 ```
 
 ## Usage
