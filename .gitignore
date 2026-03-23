@@ -1,0 +1,25 @@
+# Go binaries and build artifacts
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+
+# K6 binary
+k6
+
+# Go module cache (local)
+vendor/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+
+# Build output
+bin/
+dist/
