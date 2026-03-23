@@ -12,10 +12,10 @@ jobs:
       run:
         working-directory: xk6-fido2
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Set up Go
-        uses: actions/setup-go@v5
+        uses: actions/setup-go@v6
         with:
           go-version: '1.21'
 
@@ -37,7 +37,7 @@ jobs:
           xk6 build --with github.com/rsteenvo/k6-fido2=./xk6-fido2 --output k6-fido2
 
       - name: Upload k6 binary
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: k6-fido2
           path: k6-fido2
