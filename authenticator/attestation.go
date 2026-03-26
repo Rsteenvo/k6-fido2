@@ -23,8 +23,8 @@ func (a *Authenticator) Register(opts webauthn.RegistrationOptions) (*Registrati
 		return nil, fmt.Errorf("failed to create credential: %w", err)
 	}
 
-	// Build clientDataJSON
-	clientDataJSON, err := webauthn.BuildClientDataJSON("webauthn.create", opts.Challenge, opts.Origin)
+	// Build clientDataJSON (no extensions needed for registration)
+	clientDataJSON, err := webauthn.BuildClientDataJSON("webauthn.create", opts.Challenge, opts.Origin, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to build clientDataJSON: %w", err)
 	}
