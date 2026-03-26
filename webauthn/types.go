@@ -12,11 +12,12 @@ type RegistrationOptions struct {
 
 // AuthenticationOptions contains the options for credential assertion
 type AuthenticationOptions struct {
-	Challenge    string `json:"challenge"`
-	RpID         string `json:"rpId"`
-	CredentialID string `json:"credentialId"`
-	Origin       string `json:"origin"`
-	UserHandle   string `json:"userHandle,omitempty"`
+	Challenge    string                 `json:"challenge"`
+	RpID         string                 `json:"rpId"`
+	CredentialID string                 `json:"credentialId"`
+	Origin       string                 `json:"origin"`
+	UserHandle   string                 `json:"userHandle,omitempty"`
+	Extensions   map[string]interface{} `json:"extensions,omitempty"`
 }
 
 // PublicKeyCredential represents the credential returned by registration or authentication
@@ -43,10 +44,11 @@ type AssertionResponse struct {
 
 // ClientData represents the client data JSON structure
 type ClientData struct {
-	Type        string `json:"type"`
-	Challenge   string `json:"challenge"`
-	Origin      string `json:"origin"`
-	CrossOrigin bool   `json:"crossOrigin"`
+	Type        string                 `json:"type"`
+	Challenge   string                 `json:"challenge"`
+	Origin      string                 `json:"origin"`
+	CrossOrigin bool                   `json:"crossOrigin"`
+	Rar         map[string]interface{} `json:"rar,omitempty"`
 }
 
 // AttestationObject represents the CBOR-encoded attestation object

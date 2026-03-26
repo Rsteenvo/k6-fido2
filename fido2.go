@@ -74,6 +74,11 @@ func (f *Fido2) Authenticate(opts map[string]interface{}) (map[string]interface{
 		Origin:       getStringOption(opts, "origin", ""),
 		UserHandle:   getStringOption(opts, "userHandle", ""),
 	}
+	if ext, ok := opts["extensions"]; ok {
+		if extMap, ok := ext.(map[string]interface{}); ok {
+			authOpts.Extensions = extMap
+		}
+	}
 
 	result, err := f.authenticator.Authenticate(authOpts)
 	if err != nil {

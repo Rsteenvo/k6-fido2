@@ -24,8 +24,8 @@ func (a *Authenticator) Authenticate(opts webauthn.AuthenticationOptions) (*Auth
 		return nil, fmt.Errorf("failed to get credential: %w", err)
 	}
 
-	// Build clientDataJSON
-	clientDataJSON, err := webauthn.BuildClientDataJSON("webauthn.get", opts.Challenge, opts.Origin)
+	// Build clientDataJSON (extensions carry RAR data for transaction signing)
+	clientDataJSON, err := webauthn.BuildClientDataJSON("webauthn.get", opts.Challenge, opts.Origin, opts.Extensions)
 	if err != nil {
 		return nil, fmt.Errorf("failed to build clientDataJSON: %w", err)
 	}
