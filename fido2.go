@@ -7,7 +7,7 @@ import (
 	"github.com/rsteenvo/k6-fido2/authenticator"
 	"github.com/rsteenvo/k6-fido2/webauthn"
 
-	"go.k6.io/k6/js/modules"
+	"go.k6.io/k6/v2/js/modules"
 )
 
 func init() {
